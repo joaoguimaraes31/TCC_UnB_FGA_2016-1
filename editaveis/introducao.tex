@@ -1,10 +1,75 @@
 \chapter[Introdução]{Introdução}
 
-Vivemos na era da tecnologia, a principal engrenagem que move nossa atualidade é a informação.
-A informação é vital pois é dela que a sociedade deriva o conhecimento utilizado para crescer. Nos
-últimos anos a quantidade de dados têm crescido exponencialmente com o advento de novas tecnologias
-e a evolução das mídias sociais. Segundo a \textit{International Data Corporation}\footnote{Empresa privada que
-presta consultoria na área de negócios e TI.} (IDC) em 2010, a quantidade de informação passou de 1
-\textit{zettabyte}\footnote{1 Zettabyte equivale à 1.8 trilhão de Gigabytes.}, e em 2011 alcançou a
-marca de 1.8 \textit{zettabyte}, informações que foram capturadas, armazenadas, criadas ao longo dos anos e no
-fim foram mensuradas para calcular o tamanho do espaço digital \cite{gantz2011}.
+Vivemos na era da tecnologia, a principal engrenagem que move nossa atualidade é a
+informação. A informação é vital pois é dela que a sociedade deriva o conhecimento
+utilizado para crescer. Nos últimos anos a quantidade de dados tem crescido
+exponencialmente com o advento de novas tecnologias e a evolução das mídias sociais.
+Segundo a \textit{International Data Corporation}\footnote{Empresa privada que presta
+consultoria na área de negócios e TI.} (IDC) em 2010, a quantidade de informações
+passou de 1 \textit{zettabyte}\footnote{1 Zettabyte equivale à 1.8 trilhão de
+Gigabytes.}, e em 2011 alcançou a marca de 1.8 \textit{zettabyte}, informações que
+foram capturadas, armazenadas, criadas ao longo dos anos e no fim foram mensuradas
+para calcular o tamanho do espaço digital \cite{gantz2011}.
+
+Segundo \citeonline{gantz2011} a tendência é que a quantidade de informações dobre a
+cada ano juntamente com o \textit{ratio} de crescimento da informação . De acordo
+com \citeonline{wu2014} 90\% das informações atualmente, foram produzidas nos
+últimos 2 anos, ultrapassando o crescimento da capacidade de armazenamento. Com
+essa grande quantidade de dados e informações, é possível realizar análises, criar
+estratégias de gerenciamento de informações, e integra-las a novos tipos de dados
+juntamente com dados tradicionais, esse processo é o que chamamos de \textit{Big
+Data} \cite{oracle2015}.
+
+\section{Contextualização}
+
+Quando pensamos em deslocamento humano nas grandes cidades, logo pensamos no
+conceito de mobilidade urbana, que dê forma bem simples pode ser definido como o
+deslocamento de pessoas dentro do perímetro urbano. Para \citeonline{pontes2011}
+esse conceito vai além de um termo simplesmente quantitativo, e se aproxima mais para
+o qualitativo uma vez que a mobilidade se refere à capacidade que uma pessoa ou grupo
+de indivíduos possuem de se movimentar. A capacidade que está relacionada aos modos
+de transporte em função de uma atividade a ser realizada, é o que torna possível entendermos
+o propósito e definirmos diferentes perfis que atuam nas grandes metrópoles \cite{pontes2011}.
+
+Com o crescimento rápido das cidades, os planejadores urbanos precisam ter consciência
+dessa realidade, pois enfrentarão inúmeros desafios de trabalho, e o principal deles é o
+planejamento do fluxo urbano nas estradas. Para que eles possam realizar um planejamento
+efetivo é necessário que haja um estudo da mobilidade urbana na área a qual se deseja
+realizar mudanças. Hoje em dia existem inúmeras formas de realizar um mapeamento da
+mobilidade urbana, seja por GPS, aplicativos de smartphone como \textit{Foursquare}\footnote{
+Aplicativo em que o usuário posta o lugar o qual se encontra.}, \textit{Twitter}\footnote{
+Empresa responsável pelo aplicativo de post de mensagens ou twit.}, \textit{Waze}\footnote{
+Aplicativo que mostra o fluxo de transito e o melhor caminho para se chegar ao destino.}
+\cite{tugores2013}.
+
+Uma fonte de informações que possui o potencial para que possa ser feito esse estudo de dinâmica das
+cidades é os dados da rede de celulares \cite{becker2011}. \citeonline{khan2009} explicam que a
+indústria de telecomunicações cresceu tremendamente nos últimos anos, aumentando o
+número de pessoas que utilizam os serviços de telefonia em geral. No contexto das grandes
+metrópoles, é possível dizer que pelo menos todo cidadão dispõe de um celular. Logo as
+companhias de telefonia dispõem de dados para realizar uma analise de perfil do usuário
+bem como o estudo de mobilidade urbana para realização de um marketing direcionado
+\cite{khan2009}.
+
+Essas informações que são utilizadas para realizar o mapeamento, que as operadoras estão
+começando a usar, são chamadas de \textit{Call Detail Record}\footnote{\textit{Call Detail
+Record} é sinônimo de \textit{Charging Data Record}} (CDR) ou detalhamento do registro
+de ligação \cite{furletti2013}. De acordo com o manual técnico da \citeonline{3gppts2010} a definição de CDR
+é: \begin{quote}“Uma coleção de informações formatadas sobre os serviços (e.g. data da
+ligação realizada, duração da ligação, quantidade de dados transferidos, etc) para uso na
+realização de cobranças e dados de contabilidade. Para cada uma das partes a ser cobrada
+ou a cobrança de todas as partes referentes a um serviço, um CDR separado deve ser gerado, ou seja,
+mais de um CDR pode ser gerado para um único serviço, por exemplo, devido à sua longa
+duração, ou porque uma das partes ainda falta ser cobrada.”\end{quote} Já o conceito sucinto por
+\citeonline{becker2013} diz que cada CDR representar uma atividade de um usuário com
+referências no espaço (no caso o celular o qual a ligação foi realizada) e tempo (no caso
+quando o usuário realizou a ligação).
+
+Com o CDR então é possível realizar o mapeamento do fluxo urbano em determinado espaço,
+pois esses dados contém informações referentes as antenas o qual o aparelho está conectado, logo
+a análise será pertinente á verificação da movimentação desses aparelhos ao longo das torres
+de sinais. O problema em utilizar esses dados, reside na problemática do gerenciamento de
+informações pois as mesmas precisam ser reorganizadas e analisadas para que possam produzir o conhecimento
+desejado. Devido a este fato, será utilizado o conceito de \textit{Big Data} para fazer o manejamento
+desses de dados com o objetivo de preparar essas informações para serem analisadas.
+
