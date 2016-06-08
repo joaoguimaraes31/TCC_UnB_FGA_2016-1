@@ -58,7 +58,7 @@
                     \includegraphics[keepaspectratio=true,scale=0.75]
                         {figuras/figura1.eps}
                     \caption[Distribuição em Blocos no HDFS]{Distribuição em Blocos no HDFS
-                    \protect\linebreak Fonte: Colocar a fonte}
+                    \protect\linebreak Fonte: \citeonline{hadoopexample}}
                     \label{figura1}
                 \end{figure}
 
@@ -87,7 +87,7 @@
                     \includegraphics[keepaspectratio=true,scale=0.75]
                         {figuras/figura2.eps}
                     \caption[Arquitetura do HDFS]{Arquitetura do HDFS
-                    \protect\linebreak Fonte: Colocar a fonte}
+                    \protect\linebreak Fonte: \citeonline{hadoopapache}}
                     \label{figura2}
                 \end{figure}
 
@@ -130,7 +130,7 @@
                     \label{figura4}
                 \end{figure}
 
-        \subsection{Map Reduce}
+        \subsection{MapReduce}
 
             O desenvolvimento do \textit{MapReduce} surgiu de uma necessidade de processamento de uma grande
             quantidade de dados brutos, com o objetivo  de computar diversos tipos de dados derivados, como índices,
@@ -163,7 +163,7 @@
             chamadas tarefas de mapeamento e tarefas de redução. Essas tarefas são organizadas usando o YARN (Yet
             Another Resource Negotiator) e são executadas nos \textit{nodes} do cluster, e se a tarefa falha, ela será
             automaticamente reorganizada para a fila de execução em um \textit{node} diferente. Na figura \ref{figura5}
-            temos a ilustração no processo \textit{shuffle} e {sort} que é um processo que garante que toda entrada para
+            temos a ilustração do processo \textit{shuffle} e \textit{sort} que é um processo que garante que toda entrada para
             cada redutor tenha uma chave, e que transfira os valores da saída do mapeamento para a entradas dos
             redutores \cite{white2015}.
 
@@ -178,6 +178,65 @@
             \end{figure}
 
             \subsubsection{Arquitetura do MapReduce}
+
+                Para entendermos a arquitetura do \textit{MapReduce}, vamos passar por algumas fases do processo.
+                O \textit{Hadoop} divide a entrada de dados em \textit{Jobs} de \textit{MapReduce} em pedaços de
+                tamanho fixo chamados \textit{input splits}. O \textit{Hadoop} então cria um \textit{map task} para
+                cada cada \textit{split}, e roda as configurações definidas pelo usuário na função map para cada registro
+                do \textit{split}. Com vários \textit{splits} significa que o tempo de processamento de cada \textit{split}
+                é menor comparado ao tempo de processamento de um \textit{split} completo. Se estamos processando
+                os \textit{splits} em paralelo, o balanceamento de carga é mais efetivo, já quando os \textit{splits} são
+                pequenos, uma máquina rápida irá processar mais \textit{splits} comparado a uma máquina lenta
+                \cite{white2015}.
+
+                A invocação do \textit{map} é distribuída, ao longo de várias máquinas automaticamente particionando
+                os dados de entrada em intervalor de vários \textit{splits}. Os \textit{input splits} podem ser processados
+                em paralelo em diferentes máquinas. As invocações do \textit{reducer} são distribuídas pelo particionamento
+                do espaço da chave intermediária em vários \textit{splits} usando a função de particionamento. O número
+                de partições e de funções de particionamento são especificadas pelo usuário.
+
+                Na figura \ref{figura6} abaixo temos a visualização do fluxo geral das operações do MapReduce. Quando
+                um programa chama as funções de MapReduce, a seguinte sequência de ações ocorre. A biblioteca do
+                \textit{MapReduce} no programa do usuário divide os arquivos de entrada em vários \textit{splits} tipicamente
+                de 64-128MB por \textit{split}. Então ele inicia várias instancias do programa no cluster indicado \cite{dean2008}.
+
+                De acordo com \citeonline{dean2008}, uma das instancias do programa (o \textit{master}) é especial. O resto
+                são trabalhadores que terão tarefas designadas pelo máster. Existem vários \textit{map tasks} e
+                \textit{reduce tasks} a serem atribuídos. O \textit{master} decide os trabalhadores, que estão ociosos, para
+                atribuir a cada um deles um \textit{map task} e um \textit{reduce task} a serem processados. O trabalhador
+                que foi atribuído ao \textit{map task} irá ler o conteúdo do \textit{input split} correspondente. Ele analisa o
+                par de {chave,valor} dos dados de entrada e repassa cada par a função de \textit{map} definida pelo usuário.
+                Os pares de {chave,valor} intermediários serão produzidos pela função de \textit{map} que está armazenada
+                em \textit{buffer} na memória.
+
+                Tanto para \citeonline{dean2008} quanto para \citeonline{white2015}, ambos explicam que periodicamente,
+                os pares que estão em \textit{buffer} são escritos no disco local, e particionados em regiões pela função de
+                particionamento. A localização desses pares em \textit{buffer} no disco local é repassada ao \textit{master}
+                que irá se responsabilizar pelo repasse dessas localizações aos \textit{reduce workers}. Quando um \textit{reduce
+                worker} é notificado pelo \textit{master} sobre a localização, ele usa um recursos chamado \textit{Remote
+                Procedure Calls} (RPC) para ler os dados do \textit{buffer} do disco local dos \textit{map workers}. Então
+                depois que o \textit{reduce worker} lê todos os dados intermediários da partição, ele organiza por chave
+                intermediária para que todas as ocorrências da mesma chave sejam agrupadas. A organização é necessária
+                por causa que diferentes chaves são mapeadas para o mesmo \textit{reduce task}. E se esse amontoado de
+                dados intermediários for muito grande para caber em memória, uma organização externa será usada.
+
+                O \textit{reduce worker} itera sobre os dados intermediários organizados e para cada chave intermediária
+                única encontrada, ele repassa a chave e o intervalo de valores intermediários correspondentes a função de
+                \textit{reduce} do usuário. A saída da função \textit{reduce} é acrescentada ao final do arquivo de saída
+                para essa partição do \textit{reduce}. Quando todos os \textit{map tasks} e \textit{reduce tasks} forem
+                completados, o \textit{master} acorda a aplicação. Nesse ponto o \textit{MapReduce} chama o retorno da
+                aplicação para o código do usuário \cite{dean2008}.
+
+                \begin{figure}[ht!]
+                    \centering
+                    \includegraphics[keepaspectratio=true,scale=0.5]
+                        {figuras/figura6.eps}
+                    \caption[Fluxo de dados do processo de execução do \textit{MapReduce}]
+                    {Fluxo de dados do processo de execução do \textit{MapReduce}
+                    \protect \linebreak Fonte: \citeonline{dean2008}}
+                    \label{figura6}
+                \end{figure}
+
 
 
         \subsection{YARN}
