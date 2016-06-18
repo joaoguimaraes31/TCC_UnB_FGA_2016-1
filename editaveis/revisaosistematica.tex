@@ -329,11 +329,179 @@
                         \label{figura8}
                  \end{figure}
 
-
-
-
-
     \section{HBase}
+
+        Os bancos de dados de hoje em dia se preocupam em realizar transações. Vivemos uma atualidade, o qual a profissão de
+        Administrador de Banco de dados acaba se tornando um cargo de bastante importância nas organizações. O responsável
+        pelo banco de dados irá ser responsável por manter os dados da organização e persisti-los de modo que não haja nenhum
+        problema, isso junto ao ACID (\textit{Atomic, Consistency, Isolation, Durability}) pois os bancos de dados relacionais são
+        baseados no modelo transacional. Agora em relação aos projetos em que não exista essa preocupação grande com os
+        dados, e exista um grande volume de dados, grandes corporações acabam adotando um modelo não convencional,
+        que é baseado em uma solução com um banco de dados não relacional.
+
+        O autor do livro \textit{HBase: The definitive guide} por \citeonline{george2011} explica que o \textit{HBase} é um
+        banco de dados distribuídos orientado a coluna construído em cima do HDFS. Ele aprofunda sua explicação relatando
+        que o \textit{HBase} é uma aplicação \textit{Hadoop} para ser usada quando existe a necessidade de leitura e escrita
+        randômica em tempo real para modelos de dados gigantes (\textit{datasets} de bilhões de colunas por milhões de linhas).
+        O \textit{HBase} escala o problema por uma perspectiva diferente, ele foi construído utilizando uma abordagem
+        \textit{down-top} com escalabilidade linear, ou seja, apenas adicionando novos \textit{nodes} ao \textit{cluster}.
+
+        \subsection{NoSQL}
+
+            Os bancos de dados não relacionais, que são NoSQL (\textit{Not only Structured Query Language}), são ferramentas
+            que vão de auxílio para ajudar no gerenciamento de dados interno, de uma forma mais simples em relação a um
+            banco de dados relacional. Segundo \citeonline{moniruzzaman2013} o movimento pela adoção dessa tecnologia
+            tem mudado os horizontes de comportamento dos dados. O principal ponto que o autor defende é referente a
+            tecnologia tanto de bancos relacionais quanto não-relacionais de poderem coexistir e possuírem seu espaço
+            guardado no mercado. Empresas como Facebook, Twitter, Amazon, LinkedIn e Google, utilizam banco de dados
+            NoSQL de uma forma ou outra, para tratar seus grandes volumes de dados na área de Big Data com o auxílio do
+            grande ecossistema de ferramentas como Apache \textit{Hadoop}, dentre outras \cite{moniruzzaman2013}.
+
+            Os autores \citeonline{strauch2011} e \citeonline{moniruzzaman2013} demonstram que, a integridade de dados
+            é garantida pela maioria dos bancos de dados atuais que são baseados no modelo transacional, pois isso garante
+            a consistência dos dados em situações referentes ao gerenciamento desses dados. De acordo
+            \citeonline{moniruzzaman2013} existe um teorema chamado CAP (\textit{Consistancy, Availability, Partition Tolerance})
+            que trata das características previstas nos bancos de dados não relacionais. Na figura \ref{figura9} apresenta uma
+            relação entre esses principais conceitos.
+
+            Este diagrama segundo o autor \citeonline{moniruzzaman2013} explica os seguintes atributos: \textit{Consistancy}
+            (Consistência) que trata sobre todos os clientes que acessam os dados atuais independente de atualizações e
+            remoções de dados. O atributo \textit{Availability} (Disponibilidade) que aborda a necessidade dos sistemas de
+            continuarem operando como esperado, mesmo em caso de um \textit{node} falhar. Por último temos o \textit{Partition
+            Tolerance} (Tolerância a partição) que trata da continuidade de operação do sistema como esperado, mesmo que a rede,
+            ou a troca de mensagens entre os \textit{nodes} venham a falhar.
+
+            \begin{figure}[ht!]
+                        \centering
+                        \includegraphics[keepaspectratio=true,scale=0.5]
+                            {figuras/figura9.eps}
+                        \caption[Características do NoSQL]{Características do NoSQL
+                        \protect \linebreak Fonte: \citeonline{moniruzzaman2013}}
+                        \label{figura9}
+            \end{figure}
+
+            Com a implantação do teorema CAP, o ACID não atenderia muito bem as expectativas do NoSQL, para isso surgiu o
+            BASE seguido das seguintes características:  \textit{Basically Available, Soft-state, Eventual consistency} que trata
+            sobre características referentes as operações do NoSQL. É possível fazer uma analogia de como se fosse \textit{Design
+            Patterns} para Bancos de dados distribuídos não relacionais. Dentre as características do BASE podemos citar a fraca
+            consistência de dados, disponibilidade em primeiro lugar, melhor eficiência, aproximação de respostas, simples, rápido
+            e evolucionário \cite{moniruzzaman2013}.
+
+        \subsection{Modelagem de Dados}
+
+            O \textit{HBase} é um banco de dados não relacional, ou seja, ele não suporta SQL. Ele foi baseado no \textit{Google’s
+            Bigtable}, e foi evoluído em um projeto \textit{open source} no fim de 2006 e teve sua primeira release lançada junto ao
+            \textit{Hadoop} em Outubro de 2007 \cite{white2015}.
+
+            Aprofundando a arquitetura do \textit{HBase}, \citeonline{vora2011} explica que a aplicação armazena dados em
+            tabelas que foram determinadas. Essas tabelas são feitas de linhas e colunas. Cada tabela-célula é uma intersecção
+            coordenada entre uma linha e coluna, e todas elas são versionadas. Por padrão, o versionamento é um \textit{timestamp}
+            colocado automaticamente pelo \textit{HBase} e ele ocorre no momento da inserção de dados na célula. O conteúdo da
+            célula é um \textit{Byte Array} não interpretado. Na figura \ref{figura10} abaixo pode-se visualizar o esquema do modelo
+            de dados que é rearranjado no \textit{HBase}.
+
+            \begin{figure}[ht!]
+                        \centering
+                        \includegraphics[keepaspectratio=true,scale=0.5]
+                            {figuras/figura10.eps}
+                        \caption[Estrutura do Modelo de Dados no HBase]{Estrutura do Modelo de Dados no HBase -
+                        \protect Fonte: \citeonline{white2015}}
+                        \label{figura10}
+            \end{figure}
+
+            O esquema organizacional do \textit{HBase} se baseia no conceito de coluna família, que são agrupamentos de colunas
+            de linhas. Todos os membros da coluna família têm um prefixo em comum, então por exemplo, na figura \ref{figura10}
+            temos uma coluna família chamada \textit{info} e nela temos colunas de linhas uma chamada \textit{format} e a outra
+            chamada \textit{geo}, que são reconhecidas pelo comando \textit{info:format} e \textit{info:geo}, pois remetem a coluna
+            família \textit{info} e as colunas de linhas chamadas \textit{format} e \textit{geo} para aquela coluna família em específico
+            \cite{white2015}.
+
+        \subsection{Arquitetura}
+
+            Explicação de \citeonline{george2011} apresenta que as tabelas do \textit{HBase} são automaticamente particionadas
+            horizontalmente pelo \textit{cluster} em \textit{regions} (regiões). Cada \textit{region} (região) contém um intervalo
+            de linhas de uma tabela. Inicialmente a tabela tenta comprimir os dados para que fiquem apenas em uma \textit{region},
+            mas ao longo do crescimento dos dados na tabela, a \textit{region} vai alcançando seu limite até que eventualmente
+            acabe sendo necessário particionar os dados de uma tabela em mais de uma \textit{region}. \textit{Regions} são
+            unidades que são distribuídas ao longo de um \textit{cluster HBase}. Neste quesito, se uma tabela é grande demais
+            para um servidor, ela será distribuída ao longo dos \textit{nodes} do \textit{cluster}, com cada \textit{node} guardando
+            um intervalo de \textit{regions} total da tabela em específico.
+
+            A estrutura do \textit{HBase} é organizada em um \textit{master node} que organiza o \textit{cluster} em vários
+            \textit{regionserver workers} \cite{carstoiu2010}. Segundo o artigo de \citeonline{carstoiu2010}, o \textit{HBase
+            master} possui a responsabilidade de organizar os \textit{regions} para os \textit{regionservers} registrados e por
+            recuperar as falhas do \textit{regionserver}. O \textit{master node} pode ficar um pouco sobrecarregado enquanto
+            que os \textit{regionservers} carregam \textit{regions} e requisições de leitura e escrita. Eles também gerenciam
+            \textit{region splits}, informando ao \textit{master node} sobre as novas \textit{regions} filhas para que ele possa
+            gerenciar os \textit{regions} parentes, bem como a possibilidade de atribuir substituições para as filhas ao longo do
+            gerenciamento de \textit{regions}. Referente a figura \ref{figura11} temos a ilustração da arquitetura do \textit{HBase}
+            em um \textit{cluster}, com o seus \textit{nodes} específicos, e na figura \ref{figura12} é ilustrado a arquitetura e o
+            comportamento do \textit{regionserver}.
+
+            O \textit{HBase} possui uma dependência com \textit{ZooKeeper}, pois essa é uma ferramenta de gerenciamento
+            de serviços distribuídos, e o \textit{HBase} controla as instâncias do \textit{ZooKeeper} para manter o controle no
+            cluster \cite{george2011}.  O \textit{ZooKeeper} possui um papel vital, ele possui a localização dos metadados do
+            \textit{HBase}, bem como as informações das tabelas e o endereço do \textit{cluster master} atual. A atribuição de
+            \textit{regions} é mediada pelo \textit{ZooKeeper} em caso dos servidores participantes caírem no meio da atribuição.
+            O \textit{ZooKeeper} também serve como um controle de serviços que o \textit{cluster} tem a oferecer, com isso
+            centralizando todos os serviços em um só lugar \cite{vora2011}. Na tabela \ref{tabela1} temos a ilustração das
+            principais características que o \textit{HBase} fornece para as organizações e projetos que forem usá-los.
+
+            \begin{figure}[ht!]
+                        \centering
+                        \includegraphics[keepaspectratio=true,scale=0.5]
+                            {figuras/figura11.eps}
+                        \caption[Arquitetura de um \textit{cluster} HBase]{Arquitetura de um \textit{cluster} HBase
+                        \protect Fonte: \citeonline{white2015}}
+                        \label{figura11}
+            \end{figure}
+
+            \begin{figure}[ht!]
+                        \centering
+                        \includegraphics[keepaspectratio=true,scale=0.7]
+                            {figuras/figura12.eps}
+                        \caption[\textit{Regionserver} no HBase]{\textit{Regionserver} no HBase -
+                        \protect Fonte: \citeonline{george2011}}
+                        \label{figura12}
+            \end{figure}
+
+            \begin{table}[!ht]
+            \begin{center}
+              \begin{tabular}{|p{8cm}|p{8cm}|}
+                \hline
+                Caracteristicas do HBase & Descrição
+                \\ \hline
+                Não possui indexação & As linhas são armazenadas sequencialmente,
+                                                        assim como as colunas em cada linha. Não existe
+                                                        sobrecarga de indexação, e o desempenho da
+                                                        inserção é independente do tamanho da tabela.
+                \\ \hline
+                Particionamento automático & Conforme as tabelas vão crescendo, elas vão sendo divididas em
+                                                                    \textit{regions} e distribuídas ao longo dos \textit{nodes}.
+                \\ \hline
+                Escalabilidade linear e automática com novos nodes & Possibilidade de adição de novos \textit{nodes} para um
+                                                                                                          determinado \textit{cluster}, e execução de \textit{regionserver}
+                                                                                                          nesses novos \textit{nodes}. Os \textit{regions} serão
+                                                                                                          automaticamente balanceados e carregados igualmente ao longo
+                                                                                                          dos novos \textit{regionserver}.
+                \\ \hline
+                Hardware barato para suporta o \textit{HBase} & Não existe necessidade de um hardware de alta capacidade
+                                                                                                  para executar essa ferramenta.
+                \\ \hline
+                Tolerância a falhas & Vários \textit{nodes} significa que cada um é relativamente insignificante. Não existe
+                                                    necessidade de se preocupar com a falha de um \textit{node} individual.
+                \\ \hline
+                Processamento em Lote & Integração com \textit{MapReduce} permite paralelizar totalmente,
+                                                            distribuir \textit{jobs} com relacionado aos dados com o conhecimento da localidade.
+                \\ \hline
+              \end{tabular}
+              \caption[Características do HBase]{Características do HBase -
+              \protect Fonte: Adaptado de \cite{white2015} e \cite{george2011}}
+            \label{tabela1}
+            \end{center}
+            \end{table}
+
+
 
     \section{Spark}
 
