@@ -452,7 +452,7 @@
                         \includegraphics[keepaspectratio=true,scale=0.5]
                             {figuras/figura11.eps}
                         \caption[Arquitetura de um \textit{cluster} HBase]{Arquitetura de um \textit{cluster} HBase
-                        \protect Fonte: \citeonline{white2015}}
+                        \protect \linebreak Fonte: \citeonline{white2015}}
                         \label{figura11}
             \end{figure}
 
@@ -496,14 +496,251 @@
                 \\ \hline
               \end{tabular}
               \caption[Características do HBase]{Características do HBase -
-              \protect Fonte: Adaptado de \cite{white2015} e \cite{george2011}}
+              \protect Fonte: Adaptado de \citeonline{white2015} e \citeonline{george2011}}
             \label{tabela1}
             \end{center}
             \end{table}
 
-
-
     \section{Spark}
+
+        Neste capítulo será explicado o conceito da ferramenta \textit{Spark}. Uma ferramenta de processamento que auxilia o
+        \textit{MapReduce} e se integra junto a outras ferramentas. Essa ferramenta produzida em 2009 na universidade de
+        \textit{Berkeley} nos Estados Unidos, a ferramenta ganhou um apoio muito forte da comunidade Apache o qual mantem
+        a ferramenta bem como suporte do Cloudera. Essa ferramenta veio para trazer um conceito evolutivo nas atividades de
+        processamento em \textit{Big Data}.
+
+        Apache \textit{Spark} é uma plataforma de processamento em cluster designada para ser rápida e possuir um propósito
+        de processamento genérico \cite{karau2015}. O Spark oferece um suporte eficiente ao modelo \textit{MapReduce} para
+        diferentes tipos processamento computacional, incluindo \textit{queries} interativas e \textit{stream processing}.
+        Velocidade é importante em relação ao processamento de grandes \textit{datasets}, e isso significa diferença entre
+        explorar os dados interativamente ou esperar minutos ou horas. Uma das principais características do \textit{Spark} é a
+        habilidade de executar processamento em memória, e esse sistema é mais eficiente que o \textit{MapReduce} para
+        aplicações complexas executadas em disco \cite{karau2015}.
+
+        O auto \citeonline{karau2015} explica que o \textit{Spark} foi desenvolvido para executar um processamento extensivo que
+        antigamente era requerida com sistemas distribuídos separados, incluído aplicações em lote, algoritmos iterativos, \textit{queries}
+        interativas e \textit{streaming}. Por suporta esse tipo de processamento com a mesma \textit{engine}, o \textit{Spark}
+        tornou fácil e não tão caro a combinação de diferentes tipos de processamento, que são necessários na produção da
+        análise de dados em \textit{pipeline}. Em complemento pode-se dizer que ele reduz a carga de gerenciamento e da manutenção
+        de ferramentas em especifico \cite{karau2015}.
+
+        Segundo \citeonline{white2015}, o \textit{Spark} foi desenvolvido para ser altamente acessível, oferecendo API’s simples
+        em Python, Java, Scala e SQL, além de ser construído em um rico acervo de bibliotecas. Ele também se integra com outras
+        ferramentas de \textit{Big Data}, em particular o \textit{Spark} pode ser executado junto aos \textit{clusters} de
+        \textit{Hadoop} sem contar de poder acessar o HDFS, incluindo \textit{HBase}.
+
+        Uma das características principais do Spark que \citeonline{white2015} explica, é a capacidade dele trabalhar com um
+        grande acervo de \textit{datasets} em memória. Essa capacidade permite o \textit{Spark} trabalhar com uma eficiência
+        maior que o fluxo de trabalho do \textit{MapReduce}, ao qual os \textit{datasets} são sempre carregados do disco.
+
+        \subsection{Módulos do Spark}
+
+            O \textit{Spark} é composto por uma série de módulos que integradas permitem que a aplicação possa trabalhar em
+            diversos campos de processamento de dados no \textit{Big Data} \cite{karau2015}. Desde algoritmos iterativos que
+            permitem que uma função seja aplicada várias vezes ao \textit{dataset} até que a condição de saída aconteça, bem
+            como analises interativas que permitem ao usuário executar uma série de \textit{queries} exploratórias no \textit{dataset},
+            ao invés de ficar esperando pelo resultado \cite{white2015}. A figura \ref{figura13} ilustra os módulos do \textit{Spark},
+            bem como as ferramentas de gerenciamento de \textit{clusters} ao qual ele se integra.
+
+            \begin{figure}[ht!]
+                        \centering
+                        \includegraphics[keepaspectratio=true,scale=0.7]
+                            {figuras/figura13.eps}
+                        \caption[Módulos do Spark]{Módulos do Spark
+                        \protect \linebreak Fonte: \citeonline{karau2015}}
+                        \label{figura13}
+            \end{figure}
+
+            Seguindo ao que o diagrama da figura \ref{figura13} temos o \textit{core} do Spark, que contém funcionalidades
+            básicas ao \textit{Spark}, que incluem componentes para agendamento de \textit{tasks}, gerenciamento de
+            memória, recuperação de falhas, interação com os sistemas de armazenamento e mais. O \textit{core} também
+            fornece \textit{API’s} que definem o chamado \textit{Resilient Distributed Datasets} (RDDs) que são as principais
+            bibliotecas de abstração da programação do \textit{Spark} \cite{karau2015}.
+
+            O módulo de \textit{Spark} SQL fornece um pacote que trabalha com dados estruturados. Ele permite realizar
+            \textit{queries} via SQL bem como pelo Apache \textit{Hive} variante do SQL chamada \textit{Hive Query Language}
+            (HQL). Ele suporta várias fontes de dados, incluindo tabelas \textit{Hive, Parquet} e JSON. Além de fornecer uma
+            interface SQL ao \textit{Spark}, este módulo permite que os desenvolvedores misturem \textit{queries} SQL com
+            manipulações de dados via programação, suportada pelos RDDs de Python, Java e Scala, tudo isso em uma só aplicação,
+            combinando SQL a uma complexidade analítica \cite{karau2015}.
+
+            Referente ao módulo de \textit{Spark Streaming}, este componente permite processamento de \textit{stream} de dados
+            ao vivo. Este módulo fornece uma API para manipulação de \textit{stream} de dados que é semelhante ao \textit{core}
+            do \textit{Spark} referente as API’s dos RDD’s, tornando mais fácil para os programadores aprenderem o projeto e permitir
+            mover entre aplicações que manipulam dados armazenados em memória, no disco, ou que chegam em tempo real. Debaixo
+            dessa API, este módulo foi desenvolvido para fornecer o mesmo nível de tolerância a falha, taxa de transferência e
+            escalabilidade assim como o \textit{core} do \textit{Spark} \cite{karau2015}.
+
+            Um módulo bastante interessante no que se referente ao quesito de aprendizagem de máquina, o \textit{Spark} tem um
+            módulo que contém bibliotecas para funcionalidades de \textit{Machine Learning} chamadas MLlib. Esse módulo fornece
+            múltiplos tipos de algoritmos para \textit{machine learning}, incluindo classificação, regressão, \textit{clustering}, e filtros
+            colaborativos, bem como funcionalidades de suporte a modelos e importação de dados \cite{karau2015}.
+
+            Outro módulo que faz parte do \textit{Spark} é o \textit{GraphX}, uma biblioteca para manipulação de grafos, e para
+            realização de processamento em paralelo de grafos. Como o \textit{Spark Streaming} e \textit{Spark} SQL, o \textit{GraphX}
+            estende do \textit{Spark} RDD API, que permite criar grafos diretamente com propriedades arbitrárias em anexo para cada
+            vértice e ponta. \textit{GraphX} também fornece várias operações de manipulação de grafos e uma biblioteca com os algoritmos
+            de grafos mais comuns \cite{karau2015}.
+
+            De baixo da camada de abstração do Spark, foi desenvolvido um sistema para alcançar uma eficiência alta em escala de
+            um \textit{node} para vários \textit{nodes} computacionais. Com o objetivo de alcançar a máxima flexibilidade, o Spark
+            pode executar uma variedade de gerentes de cluster, incluindo \textit{Hadoop} YARN, Apache \textit{Mesos} e um simples
+            gerente de cluster incluído no próprio \textit{Spark}, chamado \textit{Standalone Scheduler} \cite{karau2015}.
+
+        \subsection{Resilient Distributed Datasets}
+
+            As abstrações realizadas no \textit{Spark}, são feitas com base nas RDDs que é o coração do Spark. As RDDs são abstrações
+            que dão ao usuário o controle do compartilhamento de dados. Essas RDDs também são tolerantes a falha, possuem estrutura
+            de dados paralelas que permitem ao usuário armazenar dados em disco ou na memória explicitamente, as RDDs também
+            controlam o particionamento, e manipulam usando um grande acervo de operadores. Eles oferecem uma maneira simples
+            e uma interface de programação eficiente que captura tanto os modelos especializados quanto novas aplicações
+            \cite{zaharia2013}.
+
+            Na definição de \citeonline{zaharia2013}, uma RDD é apenas para leitura, particionada em uma coleção de registros.
+            As RDDs podem ser criadas apenas por operações determinísticas em um dado no armazenamento estável ou por outras
+            RDDs. Essas operações são chamadas de \textit{transformations} para diferencia-las de outras operações no RDDs.
+            Exemplo dessas operações de transformação incluem \textit{map, filter} e \textit{join} \cite{karau2015}.
+
+            Os usuários podem controlar outros aspectos dos RDDs, no caso \textit{persistence} e \textit{partitioning}. Os usuários
+            também podem indicar os RDDs que serão reusados e escolher o armazenamento estratégico para eles. Outra ação que
+            pode ser realizada é pedir que os elementos do RDD sejam particionados ao longo do \textit{cluster} utilizando uma
+            chave para cada registro, e esta ação fornece uma otimização que garante a possibilidade de juntar dois \textit{datasets}
+            que são particionados usando uma única \textit{hash} que garante o controle das partições \cite{zaharia2013}.
+
+             \begin{figure}[ht!]
+                        \centering
+                        \includegraphics[keepaspectratio=true,scale=0.5]
+                            {figuras/figura14.eps}
+                        \caption[Execução no Spark]{Execução no Spark
+                        \protect \linebreak Fonte: \citeonline{zaharia2013}}
+                        \label{figura14}
+            \end{figure}
+
+        \subsection{Representação dos RDDs}
+
+            O autor \citeonline{zaharia2013} que foi um dos responsáveis por surgir com o conceito de representação dos RDDs
+            relata que um dos desafios em fornecer RDDs como abstração era escolher a representação para eles, e como seria
+            possível rastrear o \textit{lineage} (Um log sobre as transformações realizadas em determinado RDD) ao longo de
+            um intervalo de transformações. Idealmente, a implementação do sistema de RDDs deveria fornecer um uma série
+            operadores de transformações, para dar um poder de escolha aos usuários em elaborar suas próprias ações de forma
+            arbitrária. A resolução deste problema se baseou na representação do RDD na forma de um grafo, pois essa representação
+            suporta uma série de transformações sem a necessidade de adicionar alguma lógica especial ao agendamento de cada RDD,
+            o que simplificou bastante o design do sistema \cite{zaharia2013}.
+
+            A camada de interface do RDD, oferece acesso a informações essenciais como: o intervalo de \textit{dependencies}
+            que são pedaços atômicos do \textit{dataset}, uma série de \textit{dependencies} nos RDDs pais, uma função para
+            computar o \textit{dataset} baseado nos pais, e os metadados sobre o esquema de particionamento bem como a
+            localização dos dados \cite{karau2015}.
+
+            As dependências dos RDDs são classificadas em dois tipos: \textit{narrow dependencies} que define cada partição do RDD
+            pai que é usada pelo menos em uma partição do RDD filho, e temos o \textit{wide dependencies} quando tem-se múltiplas
+            partições filhas que dependem dessa \textit{dependencie} \cite{karau2015}.
+
+            A explicação de \citeonline{zaharia2013} apresenta dois motivos para necessidade dessa distinção: o primeiro relata que
+            as \textit{narrow dependencies} permitem a execução de uma pipeline em um \textit{node} do \textit{cluster}, o qual
+            pode computar todos as partições dos pais. Em contraste, \textit{wide dependencies} requerem dados de todas as partições
+            dos pais que estejam disponíveis para que sejam distribuídas ao longo dos \textit{nodes} usando a operação parecida com a
+            do MapReduce. Segundo, diz em relação a recuperação após a falha de um \textit{node} ser mais eficiente com
+            \textit{narrow dependency}, já que apenas uma partição parente precisa ser reprocessada e ela pode ser processada novamente
+            em paralelo em diferentes \textit{nodes}. Em contraste, um grafo de \textit{lineage} com \textit{wide dependencies}, caso tenha
+            uma única falha no \textit{node}, isso pode causar a perda de algumas partições de todos os ancestrais de um RDD, assim
+            criando a necessidade de processar novamente por completo.
+
+            \begin{table}[!ht]
+            \begin{center}
+              \begin{tabular}{|p{5cm}|p{8cm}|}
+                \hline
+                Transformação & Descrição
+                \\ \hline
+                HDFS \textit{files} & A entrada nos RDDs são amostra de arquivos no HDFS.  Para esses RDDs, partições retornam
+                                                   uma partição para cada bloco de arquivo, \textit{preferredLocations} da aos \textit{nodes}
+                                                   que o bloco está pronto, e que o \textit{iterator} está pronto para ler o bloco.
+                \\ \hline
+                \textit{map} & Chamando \textit{map} em qualquer RDD, retorna um objeto \textit{MappedRDD}. Esse objeto tem
+                                          as mesmas partições e localizações favoritas que seus pais, mas aplica a função para \textit{map}
+                                          para os registros dos pais em um método \textit{iterator}.
+                \\ \hline
+                \textit{union} & Chamando \textit{union} em duas RDDs retorna uma RDD cuja as partições é a união dos pais.
+                                            Cada partição filha é computada por uma \textit{narrow dependency} em um pai.
+                \\ \hline
+                \textit{sample} & Amostragem é similar ao mapeamento, exceto que o RDD armazena um gerador de número
+                                              aleatório para cada partição com o objetivo de determinar a amostragem dos registros do pai.
+                \\ \hline
+                \textit{join} & Juntando duas RDDs pode levar a duas \textit{narrow dependencies}, ou a duas \textit{wide dependencies},
+                                        ou uma mistura. Em ambos os casos, a saída é um RDD com um ou vários particionamentos.
+                \\ \hline
+              \end{tabular}
+              \caption[Transformações comuns no RDD]{Transformações comuns no RDD -
+              \protect Fonte: Adaptado de \citeonline{zaharia2013} e \citeonline{karau2015}}
+            \label{tabela2}
+            \end{center}
+            \end{table}
+
+            \begin{table}[!ht]
+            \begin{center}
+              \begin{tabular}{|p{5cm}|p{8cm}|}
+                \hline
+                Operação & Significado
+                \\ \hline
+                \textit{partitions()} & Retorna uma lista de objetos de \textit{Partition}.
+                \\ \hline
+                \textit{preferredLocations(p)} & Lista os \textit{nodes} aonde a partição p pode ser acessada rapidamente
+                                                                     devido a localidade do dado.
+                \\ \hline
+                \textit{dependencies()} & Retorna lista de \textit{dependencies}.
+                \\ \hline
+                \textit{iterator(p, parentIters)} & Processa os elementos da partição p dados os \textit{iterators} para
+                                                                       as partições do pai.
+                \\ \hline
+                \textit{partitioner()} & Retorna os metadados específicos quando o RDD é particionado num intervalo \textit{hash}.
+                \\ \hline
+              \end{tabular}
+              \caption[Interface utilizada para representar os RDDs no Spark]{Interface utilizada para representar os RDDs no Spark -
+              \protect Fonte: \citeonline{zaharia2013}}
+            \label{tabela3}
+            \end{center}
+            \end{table}
+
+        \subsection{Implementação e Agendamento de Jobs}
+
+            O \textit{Spark} se integra com a entrada de dados do \textit{Hadoop} (HDFS ou HBase), usando uma API de entrada
+            que conecta as duas ferramentas e que permite executar versões não-modificadas em Scala. Cada instancia do
+            \textit{Spark} executa uma aplicação separada no \textit{cluster}, com o seu próprio \textit{driver (master)} e
+            \textit{workers}, e com compartilhamento de recursos entre essas aplicações, sendo gerenciada pelo gerente de
+            recursos do \textit{cluster} \cite{white2015}.
+
+             \begin{figure}[ht!]
+                        \centering
+                        \includegraphics[keepaspectratio=true,scale=0.7]
+                            {figuras/figura15.eps}
+                        \caption[\textit{Narrow} e \textit{Wide dependencies}. Cada caixa é um RDD com as partições em amostra nos retângulo]
+                        {\textit{Narrow} e \textit{Wide dependencies}. Cada caixa é um RDD com as partições em amostra nos retângulo -
+                        \protect  Fonte: \citeonline{zaharia2013}}
+                        \label{figura15}
+            \end{figure}
+
+            Agendar \textit{jobs} no \textit{Spark} é uma tarefa fácil pois na visão do usuário, que é caixa preta, as transformações
+            ocorrem de forma paralela, mas internamente o usuário executa uma ação no RDD, o sistema de agendamento examina
+            o grafo de \textit{lineage} do RDD para construir um ciclo de estágios a serem executados como é ilustrado na figura
+            \ref{figura16}.  Cada estágio contém várias transformações em \textit{pipeline} com \textit{narrow dependencies}. Nas
+            fronteiras de cada estágio, ocorre a operação de \textit{shuffle} que são necessárias para as \textit{wide dependencies}.
+            O sistema de agentamento então lança as \textit{tasks} para processar as partições restantes de cada estágio até que o
+            RDD alvo seja totalmente computado \cite{karau2015}.
+
+            O sistema de agendamento aloca tarefas as maquinas baseado na localidade do dado usando um atraso de agendamento.
+            Se uma tarefa precisa de processar uma partição que está disponível em memória em um \textit{node}, a tarefa é enviada
+            a aquele \textit{node}. Do contrário, a tarefa processa a partição para o RDD que possui as localizações preferenciais no
+            caso do RDD, e envia esse resultado computado ao cliente final que requisitou o processamento \cite{zaharia2013}.
+
+             \begin{figure}[ht!]
+                        \centering
+                        \includegraphics[keepaspectratio=true,scale=0.7]
+                            {figuras/figura16.eps}
+                        \caption[Estrutura do Spark sobre como ele processa os jobs por estágio]
+                        {Estrutura do Spark sobre como ele processa os jobs por estágio -
+                        \protect  Fonte: \citeonline{zaharia2013}}
+                        \label{figura16}
+            \end{figure}
 
     \section{Impala}
 
