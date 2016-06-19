@@ -1,8 +1,7 @@
 \chapter[Revisão Sistemática]{Revisão Sistemática}
 
     Este capítulo apresenta conceitos pertinentes aos principais tópicos que serão abordados
-    nesse TCC. Os tópicos abordados são, \textit{Hadoop, MapReduce, Spark, Impala, HBase e
-    Cloudera.}
+    nesse TCC. Os tópicos abordados são, \textit{Hadoop, MapReduce, HBase, Spark e Impala.}
 
     \section{Hadoop}
 
@@ -744,5 +743,125 @@
 
     \section{Impala}
 
+        Este capítulo irá abordar a ferramenta Cloudera \textit{Impala}, uma ferramenta \textit{open source} que junta ao
+        Apache \textit{Hadoop} fornece um banco de dados de análises para usuários e desenvolvedores. A abordagem irá
+        explicar a arquitetura e os serviços que o Impala fornece e que contam com um processamento paralelo massivo (MPP)
+        que torna as queries do SQL dos dados \textit{Hadoop} simples o suficiente para serem acessíveis para analises
+        familiares ao SQL e para ferramentas de \textit{Business Intelligence}, e também rápidas o suficiente para fornecer
+        exploração interativa e experimentação.
 
+        O projeto \textit{Impala} chega ao mundo do \textit{Big Data} no melhor momento. Esta ferramenta traz um alto nível
+        de flexibilidade familiar ao processamento ETL dos bancos de dados \cite{russell2013}. As características desta ferramenta
+        permitem realizar \textit{queries} em cima dos dados que o cliente possui no Apache \textit{Hadoop}. Bem como acessar
+        os mesmos dados com a combinação de ferramentas como \textit{Hive}, e outros componentes do \textit{Hadoop} como
+        Apache \textit{Pig} ou Cloudera \textit{Search}, mas sem a necessidade de duplicar ou converter dados \cite{chauhan2013}.
+        Quando a velocidade de execução de uma \textit{query} é essencial, um novo formato de arquivo colunar \textit{Parquet}
+        torna simples de reorganizar os dados para a máxima eficiência dos dados no estilo das \textit{queries} processadas em
+        \textit{data warehouses} \cite{bittorf2015}.
 
+        O objetivo da ferramenta segundo os autores \citeonline{russell2013} e \citeonline{chauhan2013}, é combinar a
+        familiaridade do suporte SQL e eficiência com múltiplos usuários em um banco de dados de análises tradicionais com
+        escalabilidade e flexibilidade do Apache \textit{Hadoop} com grau de produção, segurança e extensões de gerencia,
+        fornecidas pelo Cloudera \textit{Enterprise}. O \textit{Impala} foi lançado em meados de outubro de 2012, e ainda continua
+        em constante evolução, que é realizada pelo Apache em parceria com Cloudera.
+
+        Os autores \citeonline{bittorf2015} explicam que o \textit{Impala} é uma \textit{engine} escrita em C++ e Java. Eles
+        mantem a flexibilidade do \textit{Hadoop} utilizando componentes padrões como HDFS, HBase, Metastore, YARN,
+        Sentry sem contar da possibilidade de leitura de inúmeros padrões de formatos de arquivos como \textit{Parquet, Avro, RCFile}.
+        Para reduzir a latência que é inferida pela utilização do \textit{MapReduce} ou pela leitura de dados remotamente, o
+        \textit{Impala} implementa a arquitetura distribuída baseada em processos em \textit{background} que são responsáveis
+        por todos os aspectos de execução de \textit{queries} e que são executadas nos mesmos \textit{nodes} que o resto da
+        infraestrutura do \textit{Hadoop} \cite{chauhan2013}.
+
+        \subsection{Arquitetura}
+
+            O \textit{Impala} foi desenvolvido com o objetivo de integração em ambientes padrões de \textit{Business Intelligence},
+            e para fim de suporte em padrões industriais: clientes podem conectar via ODBC ou JDBC, com autenticações via
+            \textit{Kerberos} ou \textit{LDAP} e com autorizações de papéis e privilégios via SQL \cite{russell2013}. Vale ressaltar
+            que a ferramenta não suporta \textit{UPDATE} ou \textit{DELETE} devido as limitações do HDFS, para isso o usuário
+            tipicamente reprocessa as partes dos dados e reincorpora novamente aos dados, deletando os registros antigos
+            correspondentes \cite{bittorf2015}.
+
+            De acordo com \citeonline{chauhan2013} \textit{Impala} é uma \textit{engine} de execução de \textit{queries} MPP,
+            que pode ser executado em centenas de máquinas em um \textit{cluster Hadoop} existente. O auto \citeonline{russell2013}
+            relata que o \textit{Impala} é desacoplado a uma \textit{engine} de armazenamento, diferente dos sistemas de gerenciamento
+            de banco de dados aonde os processamentos de \textit{queries} ocorrem junto a uma \textit{engine} de armazenamento
+            altamente acoplada ao sistema. A arquitetura do \textit{Impala} em alto nível pode ser vista na figura \ref{figura17}.
+
+            A implantação do \textit{Impala} é composta de três serviços. Um serviço chamado \textit{Impala daemon (impalad)}
+            que é duplamente responsável em aceitar as \textit{queries} do processo do cliente e organizar a execução dessas
+            queries ao longo do \textit{cluster}, e para execução individual de fragmentos de \textit{query} em favor de outros
+            \textit{Impala daemons} \cite{bittorf2015}. Quando um \textit{Impala daemon} opera no papel de gerenciamento da
+            execução da \textit{query}, é dito que esse serviço é o \textit{coordinator} daquela \textit{query}. Entretanto, todos
+            os \textit{Impala daemons} são simétricos, eles podem operar em todos os papéis. Essa propriedade ajuda com a
+            tolerância a falhas e com o balanceamento de carga \cite{bittorf2015}.
+
+            Cada \textit{node} do \textit{cluster} que esteja com a execução de um \textit{datanode} do HDFS, terá a
+            implantação de um \textit{Impala daemon}.  Esta ação permite com que o \textit{Impala} tenha acesso a localidade
+            dos dados, para leitura dos blocos do sistema de arquivos sem a necessidade de usar a rede \cite{bittorf2015}. Outro
+            serviço importante é o \textit{Statestore daemon (statestored)} é um serviço de inscrição-publicação de metadados
+            do \textit{Impala}, que fornece ao longo de todo o \textit{cluster} os metadados para todos os processos do \textit{Impala}
+            \cite{russell2013}.
+
+            O \textit{Catalog daemon (catalogd)} trata-se de um serviço de repositório de catálogos de metadados do \textit{Impala},
+            bem como uma forma de acesso rápido a esse tipo de informação. Por esse serviço, os \textit{Impala daemons} podem
+            executar comandos DDL que são refletidos em armazenamentos nos catálogos externos como o \textit{Hive Metastore}
+            \cite{bittorf2015}.
+
+            Todos esses serviços, bem como suas opções de configuração, tamanhos dos recursos, a memória que será disponibilizada,
+            todos esses detalhes estão expostos no Cloudera \textit{Manager}, um sistema de gerenciamento de cluster sofisticado.
+            Cloudera não só administra o \textit{Impala}, mas bem como uma série de serviços para uma visão holística da implantação
+            do \textit{Hadoop} \cite{chauhan2013}.
+
+             \begin{figure}[ht!]
+                        \centering
+                        \includegraphics[keepaspectratio=true,scale=0.7]
+                            {figuras/figura17.eps}
+                        \caption[Arquitetura do Impala]
+                        {Arquitetura do Impala
+                        \protect \linebreak Fonte: \citeonline{bittorf2015}}
+                        \label{figura17}
+            \end{figure}
+
+        \subsection{Serviços de Statestore e Catalog}
+
+            Um dos desafios do desenvolvimento de um banco de dados MPP de acordo com \cite{bittorf2015}, era ter de rodar uma
+            \textit{query} em vários \textit{nodes} coordenados e sincronizados com os metadados do \textit{cluster}. A arquitetura
+            simétrica de \textit{node} do \textit{Impala} requer que todos os \textit{nodes} estejam disponíveis para aceitar e executar
+            as \textit{queries}. Para isso todos os \textit{nodes} precisam estar de acordo com todas as versões do catalogo do sistema
+            e ter a mesma visão da filiação das instâncias do \textit{Impala} no \textit{cluster} para que o agendamento da \textit{query}
+            possa ocorrer corretamente \cite{bittorf2015}.
+
+            A resolução desse problema explica \cite{russell2013}, foi a adoção de um sistema de \textit{broadcast} de atualizações
+            para todas as partes interessadas, um serviço de publicação-inscrição chamado \textit{statestore} para disseminar as
+            mudanças nos metadados a um intervalo de inscritos (\textit{subscribers}). O \textit{statestore} mantêm um intervalo
+            de tópicos, que são \textit{arrays} de chaves, valores e versões chamados de \textit{entries}. Um tópico é definido por
+            uma aplicação, então o \textit{statestore} não possui conhecimento do conteúdo de nenhum tópico de entrada. Os tópicos
+            são persistentes ao longo do tempo de vida dos \textit{statestores}, mas não são persistidos ao longo do reinicio dos serviços.
+            O processo que deseja receber atualizações de algum tópico é chamado de inscrito, e expressa seus interesses realizando o
+            registro com o \textit{statestore} no início do serviço e fornecendo a lista de tópicos. O \textit{statestore} responde o
+            registro enviando ao inscrito, uma atualização do tópico inicial para cada tópico registrado, que consiste de todas as
+            entradas atuais daquele tópico.
+
+            Depois do registro, o \textit{statestore} periodicamente envia dois tipos de mensagem para cada inscrito \cite{bittorf2015}.
+            O primeiro é a mensagem relacionada com as atualizações do tópico, que consiste em todas as mudanças realizadas no
+            tópico até a última data. Cada inscrito mantêm um identificador por tópico pela versão mais recente, que permite ao
+            \textit{statestore} enviar apenas os dados que foram atualizados, sem repetir a mesma informação \cite{bittorf2015}.
+            Em resposta cada inscrito envia uma lista de mudanças que serão aplicadas até o tempo de envio das próximas
+            atualizações chegarem. O segundo tipo de mensagem do \textit{statestore} é o chamado \textit{keepalive}.
+            O \textit{statestore} usa as mensagens do \textit{keepalive} para manter a conexão de cada inscrito, o que poderia
+            gerar um \textit{time-out} na inscrição e uma tentativa de registro novamente \cite{bittorf2015}.
+
+            O serviço de catálogo do \textit{Impala} segundo \citeonline{chauhan2013}, serve como um catálogo de metadados para
+            os \textit{Impala daemons} via o mecanismo de \textit{broadcast} do \textit{statestore}, e executa operações DDL em
+            nome dos \textit{Impala daemons}. O serviço de catalogo pega as informações dos metadados de terceiros como os
+            dados do \textit{Metastore, Namenode, Datanodes} armazena-os e agrega essas informações em uma estrutura de
+            catalogo compatível com \textit{Impala} \cite{chauhan2013}. Este serviço também permite acrescentar o catalogo do
+            sistema com informações especificas sobre o \textit{Impala}.
+
+    \section{Considerações Finais do Capítulo}
+
+        Os conceitos e explicações aprofundadas de cada ferramenta que foram explicadas na revisão sistemática, irão servir como
+        apoio para entendermos a solução do processamento de dados que foi adotada pela empresa. Em cima deste conhecimento,
+        a proposta será elicitada com base neste referencial de forma a surgir com uma solução que possa atender ao requisitado com
+        base nos objetivos que foram apresentados.
